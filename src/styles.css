@@ -143,14 +143,33 @@ canvas {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(85, 86, 84, 0.96),
+      rgb(4, 28, 52)
 
-  background: var(--sklearn-orange);
+    );
+  /* background: var(--sklearn-orange); */
+
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   color: #fff;
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10; */
+  box-shadow: 0px  1px 3px rgba(255,255,255,0.2);
 }
 
 .site-header.is-compact {
-  background: var(--scipy-navy);
+  
+  background-color: var(--scipy-navy);
+    
 }
+  
+
 
 .site-header-inner {
   display: flex;

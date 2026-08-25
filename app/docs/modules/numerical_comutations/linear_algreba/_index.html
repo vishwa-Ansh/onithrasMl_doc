@@ -1,0 +1,1705 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="OnithrasML Linear Algebra documentation. Learn about matrix operations, linear systems, decompositions, matrix functions and numerical stability."
+    />
+
+    <title>Linear Algebra — OnithrasML</title>
+
+    <link rel="stylesheet" href="./linear-algebra.css" />
+
+    <!-- MathJax -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["\\(", "\\)"]],
+          displayMath: [["\\[", "\\]"]],
+        },
+      };
+    </script>
+
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+
+  <body>
+    <!-- =====================================================
+     HEADER
+===================================================== -->
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="../index.html" class="brand"> Onithras<span>ML</span> </a>
+
+        <nav class="main-nav">
+          <a href="../index.html"> Documentation </a>
+
+          <a href="../numerical.html"> Numerical </a>
+
+          <a href="./linear-algebra.html" class="active"> Linear Algebra </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- =====================================================
+     PAGE
+===================================================== -->
+
+    <main class="page">
+      <!-- =================================================
+         BREADCRUMB
+    ================================================== -->
+
+      <div class="breadcrumb">
+        <a href="../index.html"> Documentation </a>
+
+        <span>/</span>
+
+        <a href="../numerical.html"> Numerical Computing </a>
+
+        <span>/</span>
+
+        <span> Linear Algebra </span>
+      </div>
+
+      <!-- =================================================
+         DOCUMENTATION LAYOUT
+    ================================================== -->
+
+      <div class="documentation-layout">
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+          <div class="sidebar-title">Linear Algebra</div>
+
+          <div class="sidebar-group">
+            <div class="sidebar-group-title">Overview</div>
+
+            <a href="#overview"> Introduction </a>
+
+            <a href="#comparison"> NumPy comparison </a>
+
+            <a href="#arrays"> Arrays & matrices </a>
+          </div>
+
+          <div class="sidebar-group">
+            <div class="sidebar-group-title">Basic routines</div>
+
+            <a href="#inverse"> inv </a>
+
+            <a href="#solve"> solve </a>
+
+            <a href="#det"> det </a>
+
+            <a href="#norm"> norm </a>
+
+            <a href="#lstsq"> lstsq </a>
+
+            <a href="#pinv"> pinv </a>
+          </div>
+
+          <div class="sidebar-group">
+            <div class="sidebar-group-title">Decompositions</div>
+
+            <a href="#eigen"> Eigenvalues </a>
+
+            <a href="#svd"> SVD </a>
+
+            <a href="#lu"> LU </a>
+
+            <a href="#cholesky"> Cholesky </a>
+
+            <a href="#qr"> QR </a>
+
+            <a href="#schur"> Schur </a>
+          </div>
+
+          <div class="sidebar-group">
+            <div class="sidebar-group-title">Matrix functions</div>
+
+            <a href="#matrix-functions"> Overview </a>
+
+            <a href="#expm"> expm </a>
+
+            <a href="#logm"> logm </a>
+
+            <a href="#funm"> funm </a>
+          </div>
+
+          <div class="sidebar-group">
+            <div class="sidebar-group-title">Advanced</div>
+
+            <a href="#special-matrices"> Special matrices </a>
+
+            <a href="#batch"> Batch operations </a>
+
+            <a href="#stability"> Numerical stability </a>
+          </div>
+        </aside>
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <article class="content">
+          <!-- =================================================
+                 HERO
+            ================================================== -->
+
+          <section class="hero" id="overview">
+            <div class="eyebrow">ONITHRASML · LINEAR ALGEBRA</div>
+
+            <h1>Linear Algebra</h1>
+
+            <p class="hero-description">
+              Numerical tools for vectors, matrices, linear systems, matrix
+              decompositions, matrix functions, and the numerical foundations
+              used throughout scientific computing and machine learning.
+            </p>
+
+            <div class="hero-tags">
+              <span class="hero-tag"> matrices </span>
+
+              <span class="hero-tag"> vectors </span>
+
+              <span class="hero-tag"> solvers </span>
+
+              <span class="hero-tag"> decompositions </span>
+
+              <span class="hero-tag"> numerical stability </span>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 INTRODUCTION
+            ================================================== -->
+
+          <section class="doc-section">
+            <div class="section-label">INTRODUCTION</div>
+
+            <h2>The numerical foundation for matrix-based computation.</h2>
+
+            <p>
+              Linear algebra is one of the fundamental building blocks of
+              numerical computing. Vectors and matrices are used to represent
+              data, transformations, linear systems, optimization problems,
+              simulations, and many machine-learning algorithms.
+            </p>
+
+            <p>
+              The OnithrasML linear algebra API provides numerical routines for
+              solving systems, computing matrix properties, performing
+              decompositions, constructing matrix functions, and working with
+              structured matrices.
+            </p>
+
+            <div class="callout">
+              <div class="callout-icon">!</div>
+
+              <div>
+                <strong> Prefer specialized numerical routines </strong>
+
+                <p>
+                  If your goal is to solve \(Ax=b\), use
+                  <code>linalg.solve()</code>
+                  instead of explicitly computing \(A^{-1}\).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 COMPARISON
+            ================================================== -->
+
+          <section class="doc-section" id="comparison">
+            <div class="section-label">ECOSYSTEM</div>
+
+            <h2>OnithrasML and NumPy linear algebra</h2>
+
+            <p>
+              OnithrasML is designed to operate naturally with NumPy-compatible
+              numerical arrays. Array manipulation and specialized linear
+              algebra routines serve different purposes.
+            </p>
+
+            <div class="comparison">
+              <div class="comparison-card">
+                <div class="comparison-label">ARRAY COMPUTING</div>
+
+                <h3>NumPy</h3>
+
+                <p>
+                  Array creation, broadcasting, indexing, element-wise
+                  operations, reductions, and general numerical manipulation.
+                </p>
+              </div>
+
+              <div class="comparison-card active-card">
+                <div class="comparison-label">LINEAR ALGEBRA</div>
+
+                <h3>OnithrasML</h3>
+
+                <p>
+                  Linear-system solvers, matrix properties, decompositions,
+                  numerical algorithms, and higher-level scientific workflows.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 ARRAYS
+            ================================================== -->
+
+          <section class="doc-section" id="arrays">
+            <div class="section-label">INPUT DATA</div>
+
+            <h2>Arrays and matrix conventions</h2>
+
+            <p>
+              Linear algebra routines operate on numerical arrays. A matrix is
+              represented as a two-dimensional array, while a vector is commonly
+              represented as a one-dimensional array.
+            </p>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> arrays.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.0</span>, <span class="number">2.0</span>],
+    [<span class="number">3.0</span>, <span class="number">4.0</span>]
+])
+
+<span class="variable">b</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([<span class="number">5.0</span>, <span class="number">6.0</span>])</code></pre>
+              </div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-item">
+                <code>A.shape</code>
+
+                <span> Matrix dimensions </span>
+              </div>
+
+              <div class="info-item">
+                <code>b.shape</code>
+
+                <span> Vector dimensions </span>
+              </div>
+
+              <div class="info-item">
+                <code>A @ b</code>
+
+                <span> Matrix multiplication </span>
+              </div>
+
+              <div class="info-item">
+                <code>A.T</code>
+
+                <span> Transpose </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 BASIC ROUTINES
+            ================================================== -->
+
+          <section class="section-intro">
+            <div class="section-label">BASIC ROUTINES</div>
+
+            <h2>Core matrix operations</h2>
+
+            <p>
+              These routines cover the most common operations required when
+              working with numerical matrices and vectors.
+            </p>
+          </section>
+
+          <!-- =================================================
+                 INV
+            ================================================== -->
+
+          <section class="api-section" id="inverse">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.inv() </code>
+
+                <span class="api-summary">
+                  Compute the inverse of a square matrix
+                </span>
+              </div>
+
+              <span class="api-category"> BASIC </span>
+            </div>
+
+            <p>
+              Compute the inverse \(A^{-1}\) of a square matrix \(A\), where the
+              inverse satisfies
+            </p>
+
+            <div class="formula">\[ AA^{-1} = A^{-1}A = I \]</div>
+
+            <p>
+              The matrix must be square and nonsingular. If the matrix is
+              singular, an inverse does not exist.
+            </p>
+
+            <h3>Example</h3>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> inverse.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.0</span>, <span class="number">3.0</span>],
+    [<span class="number">2.0</span>, <span class="number">4.0</span>]
+])
+
+<span class="variable">A_inv</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">inv</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+
+              <div class="code-output">
+                <div class="output-label">OUTPUT</div>
+
+                <pre><code>[[-2.   1. ]
+ [ 1.  -0.5]]</code></pre>
+              </div>
+            </div>
+
+            <div class="warning">
+              <strong> Numerical advice </strong>
+
+              <p>
+                Explicit inversion is often unnecessary. To solve \(Ax=b\),
+                prefer
+                <code>linalg.solve()</code>.
+              </p>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 SOLVE
+            ================================================== -->
+
+          <section class="api-section" id="solve">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.solve() </code>
+
+                <span class="api-summary"> Solve a linear system </span>
+              </div>
+
+              <span class="api-category"> SOLVER </span>
+            </div>
+
+            <p>Solve a linear system of equations</p>
+
+            <div class="formula">\[ Ax=b \]</div>
+
+            <p>
+              where \(A\) is the coefficient matrix, \(x\) is the unknown
+              vector, and \(b\) is the right-hand side.
+            </p>
+
+            <h3>Example</h3>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> solve.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                  <span>9</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.0</span>, <span class="number">2.0</span>],
+    [<span class="number">3.0</span>, <span class="number">4.0</span>]
+])
+
+<span class="variable">b</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([<span class="number">5.0</span>, <span class="number">6.0</span>])
+
+<span class="variable">x</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">solve</span>(<span class="variable">A</span>, <span class="variable">b</span>)</code></pre>
+              </div>
+
+              <div class="code-output">
+                <div class="output-label">OUTPUT</div>
+
+                <pre><code>[-4.   4.5]</code></pre>
+              </div>
+            </div>
+
+            <div class="tip">
+              <strong> Recommended </strong>
+
+              <p>
+                Use a solver instead of computing \(A^{-1}b\). A dedicated
+                solver avoids unnecessary matrix inversion and is generally more
+                numerically appropriate.
+              </p>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 DET
+            ================================================== -->
+
+          <section class="api-section" id="det">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.det() </code>
+
+                <span class="api-summary"> Compute a matrix determinant </span>
+              </div>
+
+              <span class="api-category"> BASIC </span>
+            </div>
+
+            <p>
+              Compute the determinant of a square matrix. For a two-dimensional
+              matrix
+            </p>
+
+            <div class="formula">
+              \[ A = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \] \[
+              \det(A)=ad-bc \]
+            </div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> determinant.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                </div>
+
+                <pre><code><span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+<span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.</span>, <span class="number">2.</span>],
+    [<span class="number">3.</span>, <span class="number">4.</span>]
+])
+
+<span class="variable">value</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">det</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+
+              <div class="code-output">
+                <div class="output-label">OUTPUT</div>
+
+                <pre><code>-2.0</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 NORM
+            ================================================== -->
+
+          <section class="api-section" id="norm">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.norm() </code>
+
+                <span class="api-summary">
+                  Compute vector or matrix norms
+                </span>
+              </div>
+
+              <span class="api-category"> BASIC </span>
+            </div>
+
+            <p>
+              A norm measures the magnitude of a vector or matrix. For a vector,
+              the Euclidean norm is
+            </p>
+
+            <div class="formula">\[ \|x\|_2 = \sqrt{ \sum_i |x_i|^2 } \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> norm.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">x</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([<span class="number">3.</span>, <span class="number">4.</span>])
+
+<span class="variable">value</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">norm</span>(<span class="variable">x</span>)</code></pre>
+              </div>
+
+              <div class="code-output">
+                <div class="output-label">OUTPUT</div>
+
+                <pre><code>5.0</code></pre>
+              </div>
+            </div>
+
+            <div class="api-table">
+              <div>
+                <code>ord=1</code>
+                <span> L1 norm </span>
+              </div>
+
+              <div>
+                <code>ord=2</code>
+                <span> Euclidean / L2 norm </span>
+              </div>
+
+              <div>
+                <code>ord=np.inf</code>
+                <span> Infinity norm </span>
+              </div>
+
+              <div>
+                <code>ord="fro"</code>
+                <span> Frobenius norm </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 LSTSQ
+            ================================================== -->
+
+          <section class="api-section" id="lstsq">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.lstsq() </code>
+
+                <span class="api-summary">
+                  Solve a linear least-squares problem
+                </span>
+              </div>
+
+              <span class="api-category"> SOLVER </span>
+            </div>
+
+            <p>
+              Least squares finds an approximate solution when an exact solution
+              may not exist.
+            </p>
+
+            <div class="formula">\[ \min_x \|Ax-b\|_2^2 \]</div>
+
+            <p>
+              This is widely used in regression, curve fitting, parameter
+              estimation, optimization, and machine learning.
+            </p>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> least_squares.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                  <span>9</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.</span>, <span class="number">1.</span>],
+    [<span class="number">1.</span>, <span class="number">2.</span>],
+    [<span class="number">1.</span>, <span class="number">3.</span>]
+])
+
+<span class="variable">b</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([<span class="number">2.</span>, <span class="number">2.9</span>, <span class="number">4.1</span>])
+
+<span class="variable">x</span>, <span class="variable">residuals</span>, <span class="variable">rank</span>, <span class="variable">s</span> <span class="operator">=</span> \
+    <span class="variable">linalg</span>.<span class="function">lstsq</span>(<span class="variable">A</span>, <span class="variable">b</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 PINV
+            ================================================== -->
+
+          <section class="api-section" id="pinv">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.pinv() </code>
+
+                <span class="api-summary">
+                  Compute the Moore-Penrose pseudo-inverse
+                </span>
+              </div>
+
+              <span class="api-category"> ADVANCED </span>
+            </div>
+
+            <p>
+              The pseudo-inverse extends the concept of matrix inversion to
+              non-square and singular matrices.
+            </p>
+
+            <div class="formula">\[ A^+ = V \Sigma^+ U^T \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> pseudo_inverse.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>],
+    [<span class="number">4.</span>, <span class="number">5.</span>, <span class="number">6.</span>]
+])
+
+<span class="variable">A_pinv</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">pinv</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 DECOMPOSITIONS
+            ================================================== -->
+
+          <section class="section-intro">
+            <div class="section-label">DECOMPOSITIONS</div>
+
+            <h2>Break complex matrices into useful structures.</h2>
+
+            <p>
+              Matrix decompositions rewrite a matrix into simpler components.
+              These representations are fundamental to numerical solvers,
+              statistics, optimization, signal processing and machine learning.
+            </p>
+          </section>
+
+          <!-- =================================================
+                 EIGEN
+            ================================================== -->
+
+          <section class="api-section" id="eigen">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.eig() </code>
+
+                <span class="api-summary"> Eigenvalues and eigenvectors </span>
+              </div>
+
+              <span class="api-category"> DECOMPOSITION </span>
+            </div>
+
+            <p>An eigenvector \(v\) of a matrix \(A\) satisfies</p>
+
+            <div class="formula">\[ Av = \lambda v \]</div>
+
+            <p>where \(\lambda\) is the corresponding eigenvalue.</p>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> eigen.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.</span>, <span class="number">2.</span>],
+    [<span class="number">3.</span>, <span class="number">4.</span>]
+])
+
+<span class="variable">values</span>, <span class="variable">vectors</span> <span class="operator">=</span> \
+    <span class="variable">linalg</span>.<span class="function">eig</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+
+            <div class="tip">
+              <strong> Common applications </strong>
+
+              <p>
+                Eigenvalue problems appear in stability analysis, dimensionality
+                reduction, differential equations, graph algorithms, and
+                spectral methods.
+              </p>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 SVD
+            ================================================== -->
+
+          <section class="api-section" id="svd">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.svd() </code>
+
+                <span class="api-summary"> Singular Value Decomposition </span>
+              </div>
+
+              <span class="api-category"> DECOMPOSITION </span>
+            </div>
+
+            <p>Singular Value Decomposition represents a matrix as</p>
+
+            <div class="formula">\[ A = U\Sigma V^T \]</div>
+
+            <p>
+              SVD is useful for low-rank approximation, dimensionality
+              reduction, numerical analysis, and least-squares problems.
+            </p>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> svd.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                  <span>8</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">1.</span>, <span class="number">2.</span>, <span class="number">3.</span>],
+    [<span class="number">4.</span>, <span class="number">5.</span>, <span class="number">6.</span>]
+])
+
+<span class="variable">U</span>, <span class="variable">s</span>, <span class="variable">Vh</span> <span class="operator">=</span> \
+    <span class="variable">linalg</span>.<span class="function">svd</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 LU
+            ================================================== -->
+
+          <section class="api-section" id="lu">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.lu() </code>
+
+                <span class="api-summary"> LU decomposition </span>
+              </div>
+
+              <span class="api-category"> DECOMPOSITION </span>
+            </div>
+
+            <p>
+              LU decomposition factors a matrix into permutation,
+              lower-triangular, and upper-triangular components.
+            </p>
+
+            <div class="formula">\[ PA = LU \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> lu.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">4.</span>, <span class="number">3.</span>],
+    [<span class="number">6.</span>, <span class="number">3.</span>]
+])
+
+<span class="variable">P</span>, <span class="variable">L</span>, <span class="variable">U</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">lu</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 CHOLESKY
+            ================================================== -->
+
+          <section class="api-section" id="cholesky">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.cholesky() </code>
+
+                <span class="api-summary"> Cholesky factorization </span>
+              </div>
+
+              <span class="api-category"> DECOMPOSITION </span>
+            </div>
+
+            <p>
+              Cholesky decomposition applies to Hermitian positive-definite
+              matrices.
+            </p>
+
+            <div class="formula">\[ A = LL^T \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> cholesky.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">4.</span>, <span class="number">2.</span>],
+    [<span class="number">2.</span>, <span class="number">3.</span>]
+])
+
+<span class="variable">L</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">cholesky</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 QR
+            ================================================== -->
+
+          <section class="api-section" id="qr">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.qr() </code>
+
+                <span class="api-summary"> QR decomposition </span>
+              </div>
+
+              <span class="api-category"> DECOMPOSITION </span>
+            </div>
+
+            <p>
+              QR decomposition factors a matrix into an orthogonal matrix \(Q\)
+              and an upper triangular matrix \(R\).
+            </p>
+
+            <div class="formula">\[ A = QR \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> qr.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                </div>
+
+                <pre><code><span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">Q</span>, <span class="variable">R</span> <span class="operator">=</span> \
+    <span class="variable">linalg</span>.<span class="function">qr</span>(<span class="variable">A</span>)
+
+<span class="comment"># A = Q @ R</span></code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 SCHUR
+            ================================================== -->
+
+          <section class="api-section" id="schur">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.schur() </code>
+
+                <span class="api-summary"> Schur decomposition </span>
+              </div>
+
+              <span class="api-category"> ADVANCED </span>
+            </div>
+
+            <p>
+              Schur decomposition represents a square matrix using a unitary
+              matrix \(Z\) and a triangular or quasi-triangular matrix \(T\).
+            </p>
+
+            <div class="formula">\[ A = ZTZ^H \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> schur.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                </div>
+
+                <pre><code><span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">T</span>, <span class="variable">Z</span> <span class="operator">=</span> \
+    <span class="variable">linalg</span>.<span class="function">schur</span>(<span class="variable">A</span>)
+
+<span class="comment"># A = Z @ T @ Z.H</span></code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 MATRIX FUNCTIONS
+            ================================================== -->
+
+          <section class="section-intro" id="matrix-functions">
+            <div class="section-label">MATRIX FUNCTIONS</div>
+
+            <h2>Mathematical functions applied directly to matrices.</h2>
+
+            <p>
+              Matrix functions extend familiar scalar mathematical functions to
+              square matrices. They are useful in differential equations,
+              simulations, dynamical systems and numerical analysis.
+            </p>
+          </section>
+
+          <!-- =================================================
+                 EXPM
+            ================================================== -->
+
+          <section class="api-section" id="expm">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.expm() </code>
+
+                <span class="api-summary"> Matrix exponential </span>
+              </div>
+
+              <span class="api-category"> MATRIX FUNCTION </span>
+            </div>
+
+            <p>Compute the matrix exponential</p>
+
+            <div class="formula">
+              \[ e^A = \sum_{k=0}^{\infty} \frac{A^k}{k!} \]
+            </div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> expm.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                </div>
+
+                <pre><code><span class="kw">import</span> <span class="module">numpy</span> <span class="kw">as</span> <span class="variable">np</span>
+<span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">A</span> <span class="operator">=</span> <span class="module">np</span>.<span class="function">array</span>([
+    [<span class="number">0.</span>, <span class="number">1.</span>],
+    [<span class="number">-1.</span>, <span class="number">0.</span>]
+])
+
+<span class="variable">E</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">expm</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 LOGM
+            ================================================== -->
+
+          <section class="api-section" id="logm">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.logm() </code>
+
+                <span class="api-summary"> Matrix logarithm </span>
+              </div>
+
+              <span class="api-category"> MATRIX FUNCTION </span>
+            </div>
+
+            <p>Compute a matrix logarithm \(X\) such that</p>
+
+            <div class="formula">\[ e^X = A \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> logm.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                </div>
+
+                <pre><code><span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">X</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">logm</span>(<span class="variable">A</span>)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 FUNM
+            ================================================== -->
+
+          <section class="api-section" id="funm">
+            <div class="api-heading">
+              <div>
+                <code class="api-name"> linalg.funm() </code>
+
+                <span class="api-summary">
+                  Apply an arbitrary scalar function to a matrix
+                </span>
+              </div>
+
+              <span class="api-category"> ADVANCED </span>
+            </div>
+
+            <p>
+              Apply a scalar function \(f\) to a square matrix using a
+              matrix-function algorithm.
+            </p>
+
+            <div class="formula">\[ B = f(A) \]</div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> funm.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                </div>
+
+                <pre><code><span class="kw">from</span> <span class="module">onithrasml</span> <span class="kw">import</span> <span class="variable">linalg</span>
+
+<span class="variable">B</span> <span class="operator">=</span> <span class="variable">linalg</span>.<span class="function">funm</span>(
+    <span class="variable">A</span>,
+    <span class="kw">lambda</span> <span class="variable">x</span>: <span class="variable">x</span> <span class="operator">**</span> <span class="number">2</span>
+)</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 SPECIAL MATRICES
+            ================================================== -->
+
+          <section class="doc-section" id="special-matrices">
+            <div class="section-label">SPECIAL MATRICES</div>
+
+            <h2>Structured matrix constructors</h2>
+
+            <p>
+              Structured matrices have known patterns that appear frequently in
+              scientific computing. Their structure can simplify algorithms and
+              mathematical analysis.
+            </p>
+
+            <div class="matrix-grid">
+              <div>
+                <code>block_diag()</code>
+                <span> Block diagonal </span>
+              </div>
+
+              <div>
+                <code>toeplitz()</code>
+                <span> Toeplitz matrix </span>
+              </div>
+
+              <div>
+                <code>hankel()</code>
+                <span> Hankel matrix </span>
+              </div>
+
+              <div>
+                <code>hilbert()</code>
+                <span> Hilbert matrix </span>
+              </div>
+
+              <div>
+                <code>circulant()</code>
+                <span> Circulant matrix </span>
+              </div>
+
+              <div>
+                <code>hadamard()</code>
+                <span> Hadamard matrix </span>
+              </div>
+
+              <div>
+                <code>pascal()</code>
+                <span> Pascal matrix </span>
+              </div>
+
+              <div>
+                <code>companion()</code>
+                <span> Companion matrix </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 BATCH
+            ================================================== -->
+
+          <section class="doc-section" id="batch">
+            <div class="section-label">ADVANCED FEATURES</div>
+
+            <h2>Batch linear algebra</h2>
+
+            <p>
+              Numerical workloads often contain many independent matrices. Batch
+              operations allow compatible routines to process these matrices
+              together.
+            </p>
+
+            <div class="batch-diagram">
+              <div class="batch-item">
+                <span> Batch </span>
+
+                <strong> 100 </strong>
+              </div>
+
+              <div class="batch-arrow">×</div>
+
+              <div class="batch-item">
+                <span> Matrix </span>
+
+                <strong> 3 × 3 </strong>
+              </div>
+
+              <div class="batch-arrow">=</div>
+
+              <div class="batch-result">
+                <code> (100, 3, 3) </code>
+              </div>
+            </div>
+
+            <div class="code-example">
+              <div class="code-header">
+                <div class="code-window">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+
+                  <span class="filename"> batch.py </span>
+                </div>
+
+                <span class="language"> Python </span>
+              </div>
+
+              <div class="code-body">
+                <div class="line-numbers">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                </div>
+
+                <pre><code><span class="comment"># 100 independent 3 × 3 matrices</span>
+
+<span class="variable">A</span>.<span class="variable">shape</span>
+<span class="comment"># (100, 3, 3)</span></code></pre>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 STABILITY
+            ================================================== -->
+
+          <section class="doc-section" id="stability">
+            <div class="section-label">NUMERICAL ANALYSIS</div>
+
+            <h2>Numerical stability is part of the algorithm.</h2>
+
+            <p>
+              Floating-point arithmetic introduces rounding error. A
+              mathematically correct algorithm is not necessarily numerically
+              reliable for every input.
+            </p>
+
+            <div class="stability-grid">
+              <div class="stability-card">
+                <div class="stability-number">01</div>
+
+                <h3>Avoid unnecessary inverse</h3>
+
+                <p>
+                  Prefer solving a system directly rather than explicitly
+                  computing the inverse matrix.
+                </p>
+              </div>
+
+              <div class="stability-card">
+                <div class="stability-number">02</div>
+
+                <h3>Check residuals</h3>
+
+                <p>After solving \(Ax=b\), verify the residual \(r=Ax-b\).</p>
+              </div>
+
+              <div class="stability-card">
+                <div class="stability-number">03</div>
+
+                <h3>Understand conditioning</h3>
+
+                <p>
+                  Ill-conditioned matrices can amplify small perturbations in
+                  input data.
+                </p>
+              </div>
+            </div>
+
+            <div class="formula">\[ r = Ax-b \]</div>
+          </section>
+
+          <!-- =================================================
+                 QUICK REFERENCE
+            ================================================== -->
+
+          <section class="doc-section">
+            <div class="section-label">QUICK REFERENCE</div>
+
+            <h2>Linear algebra API</h2>
+
+            <div class="api-reference">
+              <div>
+                <code>solve</code>
+                <span> Solve \(Ax=b\) </span>
+              </div>
+
+              <div>
+                <code>inv</code>
+                <span> Matrix inverse </span>
+              </div>
+
+              <div>
+                <code>det</code>
+                <span> Matrix determinant </span>
+              </div>
+
+              <div>
+                <code>norm</code>
+                <span> Vector or matrix norm </span>
+              </div>
+
+              <div>
+                <code>lstsq</code>
+                <span> Least-squares solution </span>
+              </div>
+
+              <div>
+                <code>pinv</code>
+                <span> Pseudo-inverse </span>
+              </div>
+
+              <div>
+                <code>eig</code>
+                <span> Eigenvalues and eigenvectors </span>
+              </div>
+
+              <div>
+                <code>svd</code>
+                <span> Singular value decomposition </span>
+              </div>
+
+              <div>
+                <code>lu</code>
+                <span> LU decomposition </span>
+              </div>
+
+              <div>
+                <code>cholesky</code>
+                <span> Cholesky factorization </span>
+              </div>
+
+              <div>
+                <code>qr</code>
+                <span> QR decomposition </span>
+              </div>
+
+              <div>
+                <code>schur</code>
+                <span> Schur decomposition </span>
+              </div>
+
+              <div>
+                <code>expm</code>
+                <span> Matrix exponential </span>
+              </div>
+
+              <div>
+                <code>logm</code>
+                <span> Matrix logarithm </span>
+              </div>
+
+              <div>
+                <code>funm</code>
+                <span> Arbitrary matrix function </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 NEXT
+            ================================================== -->
+
+          <section class="next-section">
+            <div>
+              <span> NEXT </span>
+
+              <h3>Numerical stability</h3>
+
+              <p>
+                Learn about conditioning, floating-point precision, tolerances,
+                pivoting, residuals, and stable numerical algorithms.
+              </p>
+            </div>
+
+            <a href="#">
+              Read guide
+              <span>→</span>
+            </a>
+          </section>
+        </article>
+
+        <!-- =================================================
+             RIGHT ON PAGE
+        ================================================== -->
+
+        <aside class="on-page">
+          <div class="on-page-title">On this page</div>
+
+          <a href="#overview"> Introduction </a>
+
+          <a href="#comparison"> Ecosystem </a>
+
+          <a href="#arrays"> Arrays </a>
+
+          <a href="#inverse"> inv </a>
+
+          <a href="#solve"> solve </a>
+
+          <a href="#det"> det </a>
+
+          <a href="#norm"> norm </a>
+
+          <a href="#lstsq"> lstsq </a>
+
+          <a href="#pinv"> pinv </a>
+
+          <a href="#eigen"> Eigenvalues </a>
+
+          <a href="#svd"> SVD </a>
+
+          <a href="#lu"> LU </a>
+
+          <a href="#cholesky"> Cholesky </a>
+
+          <a href="#qr"> QR </a>
+
+          <a href="#schur"> Schur </a>
+
+          <a href="#matrix-functions"> Matrix functions </a>
+
+          <a href="#special-matrices"> Special matrices </a>
+
+          <a href="#batch"> Batch operations </a>
+
+          <a href="#stability"> Stability </a>
+        </aside>
+      </div>
+
+      <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+      <footer class="footer">
+        <div>
+          <strong> OnithrasML </strong>
+
+          <span> · Linear Algebra </span>
+        </div>
+
+        <div>
+          <span> Scientific Computing </span>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

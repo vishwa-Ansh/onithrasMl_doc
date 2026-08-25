@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { latestVersion } from "../data/libraryDocs";
 
@@ -10,7 +10,7 @@ export function SiteHeader({ compact = false }: SiteHeaderProps) {
   return (
     <header className={`site-header${compact ? " is-compact" : ""}`}>
       <div className="site-header-inner">
-        <NavLink className="logo-lockup" to="/">
+        <a className="logo-lockup" href="/">
           <span className="logo-mark" aria-hidden="true">
             <svg viewBox="0 0 40 40" role="img">
               <circle cx="20" cy="20" r="18" fill="#F7931E" />
@@ -28,17 +28,22 @@ export function SiteHeader({ compact = false }: SiteHeaderProps) {
             <strong>onithrasML</strong>
             <em>Machine learning in Python</em>
           </span>
-        </NavLink>
+        </a>
 
         <nav className="site-nav" aria-label="Primary">
-          <NavLink end to="/">
+          <a href="/">
             Home
-          </NavLink>
-          <NavLink to={`/docs/${latestVersion.slug}#install`}>Install</NavLink>
-          <NavLink end to={`/docs/${latestVersion.slug}`}>
+          </a>
+          {/* <h1>{latestVersion.slug}</h1> */}
+          <a href={`/docs/${latestVersion.slug}#install`}>
+            Install
+          </a>
+          <a href={'../../../app/docs/_index.html'}>
             User guide
-          </NavLink>
-          <NavLink to={`/docs/${latestVersion.slug}#api`}>API</NavLink>
+          </a>
+          <a href={`/docs/${latestVersion.slug}#api`}>
+            API
+          </a>
           <a href="https://github.com" rel="noreferrer" target="_blank">
             GitHub
           </a>

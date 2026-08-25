@@ -1,0 +1,1520 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>solve — Linear System Solver | OnithrasML</title>
+
+    <link rel="stylesheet" href="./methods_css/solve.css" />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="/" class="brand"> OnithrasML<span>.</span> </a>
+
+        <nav class="top-nav">
+          <a href="/">Home</a>
+          <a href="/linear-algebra.html">Linear Algebra</a>
+          <a href="/guide.html">Guide</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="documentation">
+      <!-- =====================================================
+         BREADCRUMB
+    ====================================================== -->
+
+      <div class="breadcrumb">
+        <a href="/">OnithrasML</a>
+
+        <span>/</span>
+
+        <a href="/linear-algebra.html"> Linear Algebra </a>
+
+        <span>/</span>
+
+        <strong>solve</strong>
+      </div>
+
+      <div class="docs-layout">
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+          <div class="sidebar-title">Linear Algebra</div>
+
+          <div class="sidebar-group">
+            <span>Basics</span>
+
+            <a href="#overview"> Overview </a>
+
+            <a href="#signature"> Signature </a>
+
+            <a href="#parameters"> Parameters </a>
+
+            <a href="#returns"> Returns </a>
+          </div>
+
+          <div class="sidebar-group">
+            <span>Behavior</span>
+
+            <a href="#matrix-types"> Matrix Types </a>
+
+            <a href="#stability"> Numerical Stability </a>
+
+            <a href="#errors"> Errors </a>
+          </div>
+
+          <div class="sidebar-group">
+            <span>Examples</span>
+
+            <a href="#example-basic"> Basic Example </a>
+
+            <a href="#example-multiple"> Multiple RHS </a>
+
+            <a href="#example-check"> Verification </a>
+          </div>
+        </aside>
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <article class="content">
+          <!-- HERO -->
+
+          <section id="overview" class="hero">
+            <div class="eyebrow">scipy.linalg</div>
+
+            <h1>solve</h1>
+
+            <p class="lead">
+              Solve a linear system of equations of the form
+              <code>Ax = b</code>.
+            </p>
+
+            <div class="availability">
+              <span class="status-dot"></span>
+
+              Available in OnithrasML
+            </div>
+          </section>
+
+          <!-- DESCRIPTION -->
+
+          <section class="section">
+            <h2>Overview</h2>
+
+            <p>
+              <code>solve</code> computes the solution <code>x</code> of a
+              square linear system:
+            </p>
+
+            <div class="formula">A x = b</div>
+
+            <p>
+              The function is intended for solving linear systems directly
+              rather than explicitly computing the inverse of <code>A</code>.
+            </p>
+
+            <div class="callout">
+              <div class="callout-icon">i</div>
+
+              <div>
+                <strong> Prefer solving over inversion </strong>
+
+                <p>
+                  When you need to solve
+                  <code>Ax = b</code>, using <code>solve</code> is generally
+                  more efficient and numerically preferable to computing
+                  <code>inv(A)</code> first.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SIGNATURE -->
+
+          <section id="signature" class="section">
+            <h2>Signature</h2>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> Python </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code>solve(
+    a,
+    b,
+    lower=False,
+    overwrite_a=False,
+    overwrite_b=False,
+    check_finite=True,
+    assume_a=None,
+    transposed=False,
+)</code></pre>
+            </div>
+          </section>
+
+          <!-- PARAMETERS -->
+
+          <!-- =====================================================
+     PARAMETERS
+====================================================== -->
+
+          <section id="parameters" class="section">
+            <div class="section-label">API Reference</div>
+
+            <h2>Parameters</h2>
+
+            <p>
+              The <code>solve()</code> function accepts a coefficient matrix, a
+              right-hand side, and optional configuration parameters that
+              control how the linear system is solved.
+            </p>
+
+            <div class="parameter-list">
+              <!-- A -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>a</code>
+
+                  <span class="required"> required </span>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">array-like</div>
+
+                  <p>
+                    The coefficient matrix of the linear system. The matrix
+                    represents the left-hand side of the equation:
+                  </p>
+
+                  <div class="inline-formula">A x = b</div>
+
+                  <p>
+                    For a standard linear system, <code>a</code>
+                    must be a square two-dimensional array.
+                  </p>
+
+                  <div class="shape">
+                    Expected shape:
+                    <code>(N, N)</code>
+                  </div>
+
+                  <div class="parameter-example">
+                    <span> Example </span>
+
+                    <pre><code>A = np.array([
+    [3., 2.],
+    [1., -1.]
+])</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- B -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>b</code>
+
+                  <span class="required"> required </span>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">array-like</div>
+
+                  <p>
+                    The right-hand side of the linear system. It contains the
+                    values that the matrix equation must produce.
+                  </p>
+
+                  <p>
+                    A one-dimensional vector represents a single right-hand
+                    side. A two-dimensional array can represent multiple
+                    right-hand sides that share the same coefficient matrix.
+                  </p>
+
+                  <div class="shape">
+                    Accepted shapes:
+
+                    <code>(N,)</code>
+
+                    or
+
+                    <code>(N, NRHS)</code>
+                  </div>
+
+                  <div class="parameter-example">
+                    <span> Single right-hand side </span>
+
+                    <pre><code>b = np.array([
+    2.,
+    4.
+])</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LOWER -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>lower</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>
+                    Determines which triangular portion of the matrix should be
+                    considered when a structured symmetric, Hermitian, or
+                    positive-definite matrix is being solved.
+                  </p>
+
+                  <p>
+                    When <code>lower=False</code>, the solver uses the upper
+                    triangle.
+                  </p>
+
+                  <p>
+                    When <code>lower=True</code>, the solver uses the lower
+                    triangle.
+                  </p>
+
+                  <div class="parameter-example">
+                    <span> Example </span>
+
+                    <pre><code>x = solve(
+    A,
+    b,
+    lower=True
+)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OVERWRITE A -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>overwrite_a</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>
+                    Allows the solver to overwrite the input coefficient matrix
+                    <code>a</code> when possible.
+                  </p>
+
+                  <p>
+                    This option can reduce temporary memory usage and may
+                    improve performance because the solver does not necessarily
+                    need to preserve the original matrix.
+                  </p>
+
+                  <div class="warning small">
+                    <strong> Important </strong>
+
+                    <p>
+                      Do not enable this option when you need the original
+                      matrix after the solve.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OVERWRITE B -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>overwrite_b</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>
+                    Allows the solver to overwrite the right-hand side
+                    <code>b</code> when possible.
+                  </p>
+
+                  <p>
+                    This can reduce memory allocations during computation,
+                    especially when working with large arrays.
+                  </p>
+                </div>
+              </div>
+
+              <!-- CHECK FINITE -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>check_finite</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=True</div>
+
+                  <p>
+                    Determines whether the input arrays are checked for
+                    non-finite values such as
+                    <code>NaN</code> and <code>Inf</code>.
+                  </p>
+
+                  <p>Keeping this enabled provides safer input validation.</p>
+
+                  <p>
+                    Disabling the check can improve performance when the caller
+                    already guarantees that the input contains only finite
+                    values.
+                  </p>
+
+                  <div class="warning">
+                    <strong> Performance trade-off </strong>
+
+                    <p>
+                      Disabling validation should only be considered when the
+                      input has already been validated. Passing invalid
+                      numerical data to a low-level solver can result in
+                      undefined numerical behavior.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ASSUME A -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>assume_a</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">str or None</div>
+
+                  <p>
+                    Describes the known mathematical structure of the
+                    coefficient matrix.
+                  </p>
+
+                  <p>
+                    Supplying structural information can allow the
+                    implementation to select an algorithm that is better suited
+                    to the matrix.
+                  </p>
+
+                  <div class="option-list">
+                    <div>
+                      <code>general</code>
+                      <span> No special structure is assumed. </span>
+                    </div>
+
+                    <div>
+                      <code>diagonal</code>
+                      <span> Non-zero values occur only on the diagonal. </span>
+                    </div>
+
+                    <div>
+                      <code>triangular</code>
+                      <span> Matrix is upper or lower triangular. </span>
+                    </div>
+
+                    <div>
+                      <code>symmetric</code>
+                      <span> Matrix satisfies A = Aᵀ. </span>
+                    </div>
+
+                    <div>
+                      <code>positive definite</code>
+                      <span> Matrix is symmetric positive definite. </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TRANSPOSED -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>transposed</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>If enabled, solves the transposed system:</p>
+
+                  <div class="inline-formula">Aᵀ x = b</div>
+
+                  <p>
+                    This can be useful when the transpose of the coefficient
+                    matrix is required without explicitly constructing a
+                    separate matrix.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!-- =====================================================
+     PARAMETERS
+====================================================== -->
+
+          <section id="parameters" class="section">
+            <div class="section-label">API Reference</div>
+
+            <h2>Parameters</h2>
+
+            <p>
+              The <code>solve()</code> function accepts a coefficient matrix, a
+              right-hand side, and optional configuration parameters that
+              control how the linear system is solved.
+            </p>
+
+            <div class="parameter-list">
+              <!-- A -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>a</code>
+
+                  <span class="required"> required </span>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">array-like</div>
+
+                  <p>
+                    The coefficient matrix of the linear system. The matrix
+                    represents the left-hand side of the equation:
+                  </p>
+
+                  <div class="inline-formula">A x = b</div>
+
+                  <p>
+                    For a standard linear system, <code>a</code>
+                    must be a square two-dimensional array.
+                  </p>
+
+                  <div class="shape">
+                    Expected shape:
+                    <code>(N, N)</code>
+                  </div>
+
+                  <div class="parameter-example">
+                    <span> Example </span>
+
+                    <pre><code>A = np.array([
+    [3., 2.],
+    [1., -1.]
+])</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- B -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>b</code>
+
+                  <span class="required"> required </span>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">array-like</div>
+
+                  <p>
+                    The right-hand side of the linear system. It contains the
+                    values that the matrix equation must produce.
+                  </p>
+
+                  <p>
+                    A one-dimensional vector represents a single right-hand
+                    side. A two-dimensional array can represent multiple
+                    right-hand sides that share the same coefficient matrix.
+                  </p>
+
+                  <div class="shape">
+                    Accepted shapes:
+
+                    <code>(N,)</code>
+
+                    or
+
+                    <code>(N, NRHS)</code>
+                  </div>
+
+                  <div class="parameter-example">
+                    <span> Single right-hand side </span>
+
+                    <pre><code>b = np.array([
+    2.,
+    4.
+])</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LOWER -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>lower</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>
+                    Determines which triangular portion of the matrix should be
+                    considered when a structured symmetric, Hermitian, or
+                    positive-definite matrix is being solved.
+                  </p>
+
+                  <p>
+                    When <code>lower=False</code>, the solver uses the upper
+                    triangle.
+                  </p>
+
+                  <p>
+                    When <code>lower=True</code>, the solver uses the lower
+                    triangle.
+                  </p>
+
+                  <div class="parameter-example">
+                    <span> Example </span>
+
+                    <pre><code>x = solve(
+    A,
+    b,
+    lower=True
+)</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OVERWRITE A -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>overwrite_a</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>
+                    Allows the solver to overwrite the input coefficient matrix
+                    <code>a</code> when possible.
+                  </p>
+
+                  <p>
+                    This option can reduce temporary memory usage and may
+                    improve performance because the solver does not necessarily
+                    need to preserve the original matrix.
+                  </p>
+
+                  <div class="warning small">
+                    <strong> Important </strong>
+
+                    <p>
+                      Do not enable this option when you need the original
+                      matrix after the solve.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OVERWRITE B -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>overwrite_b</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>
+                    Allows the solver to overwrite the right-hand side
+                    <code>b</code> when possible.
+                  </p>
+
+                  <p>
+                    This can reduce memory allocations during computation,
+                    especially when working with large arrays.
+                  </p>
+                </div>
+              </div>
+
+              <!-- CHECK FINITE -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>check_finite</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=True</div>
+
+                  <p>
+                    Determines whether the input arrays are checked for
+                    non-finite values such as
+                    <code>NaN</code> and <code>Inf</code>.
+                  </p>
+
+                  <p>Keeping this enabled provides safer input validation.</p>
+
+                  <p>
+                    Disabling the check can improve performance when the caller
+                    already guarantees that the input contains only finite
+                    values.
+                  </p>
+
+                  <div class="warning">
+                    <strong> Performance trade-off </strong>
+
+                    <p>
+                      Disabling validation should only be considered when the
+                      input has already been validated. Passing invalid
+                      numerical data to a low-level solver can result in
+                      undefined numerical behavior.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ASSUME A -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>assume_a</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">str or None</div>
+
+                  <p>
+                    Describes the known mathematical structure of the
+                    coefficient matrix.
+                  </p>
+
+                  <p>
+                    Supplying structural information can allow the
+                    implementation to select an algorithm that is better suited
+                    to the matrix.
+                  </p>
+
+                  <div class="option-list">
+                    <div>
+                      <code>general</code>
+                      <span> No special structure is assumed. </span>
+                    </div>
+
+                    <div>
+                      <code>diagonal</code>
+                      <span> Non-zero values occur only on the diagonal. </span>
+                    </div>
+
+                    <div>
+                      <code>triangular</code>
+                      <span> Matrix is upper or lower triangular. </span>
+                    </div>
+
+                    <div>
+                      <code>symmetric</code>
+                      <span> Matrix satisfies A = Aᵀ. </span>
+                    </div>
+
+                    <div>
+                      <code>positive definite</code>
+                      <span> Matrix is symmetric positive definite. </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TRANSPOSED -->
+
+              <div class="parameter">
+                <div class="parameter-name">
+                  <code>transposed</code>
+                </div>
+
+                <div class="parameter-content">
+                  <div class="parameter-type">bool, default=False</div>
+
+                  <p>If enabled, solves the transposed system:</p>
+
+                  <div class="inline-formula">Aᵀ x = b</div>
+
+                  <p>
+                    This can be useful when the transpose of the coefficient
+                    matrix is required without explicitly constructing a
+                    separate matrix.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- MATRIX TYPES -->
+
+          <section id="matrix-types" class="section">
+            <h2>Matrix structure</h2>
+
+            <p>
+              If the structure of the matrix is known, OnithrasML can use that
+              information to select a more appropriate numerical algorithm.
+            </p>
+
+            <div class="structure-grid">
+              <div class="structure-card">
+                <code>general</code>
+
+                <h3>General matrix</h3>
+
+                <p>
+                  No special structure is assumed. This is the general-purpose
+                  case.
+                </p>
+              </div>
+
+              <div class="structure-card">
+                <code>diagonal</code>
+
+                <h3>Diagonal</h3>
+
+                <p>
+                  Only diagonal elements are used. This allows a very efficient
+                  solve.
+                </p>
+              </div>
+
+              <div class="structure-card">
+                <code>triangular</code>
+
+                <h3>Triangular</h3>
+
+                <p>Suitable for upper or lower triangular systems.</p>
+              </div>
+
+              <div class="structure-card">
+                <code>symmetric</code>
+
+                <h3>Symmetric</h3>
+
+                <p>
+                  Uses the symmetry of the matrix when the structure is known.
+                </p>
+              </div>
+
+              <div class="structure-card">
+                <code>positive-definite</code>
+
+                <h3>Positive definite</h3>
+
+                <p>Designed for symmetric positive definite systems.</p>
+              </div>
+
+              <div class="structure-card planned">
+                <code>banded</code>
+
+                <h3>Banded</h3>
+
+                <span> Planned </span>
+
+                <p>
+                  Specialized handling for matrices with non-zero values
+                  concentrated around the diagonal.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- RETURNS -->
+
+          <section id="returns" class="section">
+            <h2>Returns</h2>
+
+            <div class="return-box">
+              <code>x</code>
+
+              <div>
+                <strong> ndarray </strong>
+
+                <p>
+                  The solution of the linear system
+                  <code>Ax = b</code>.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- STABILITY -->
+
+          <section id="stability" class="section">
+            <h2>Numerical stability</h2>
+
+            <p>
+              Linear-system solvers are sensitive to the conditioning of the
+              coefficient matrix. A matrix that is nearly singular can produce a
+              solution that is highly sensitive to small perturbations in the
+              input.
+            </p>
+
+            <div class="formula">residual = ‖Ax − b‖</div>
+
+            <p>
+              After solving, the residual can be used to check how accurately
+              the computed solution satisfies the original system.
+            </p>
+
+            <div class="warning">
+              <strong> Ill-conditioned systems </strong>
+
+              <p>
+                A small residual does not always imply that the computed
+                solution is highly accurate. Conditioning of the problem should
+                also be considered.
+              </p>
+            </div>
+          </section>
+
+          <!-- ERRORS -->
+
+          <section id="errors" class="section">
+            <h2>Errors and validation</h2>
+
+            <div class="error-grid">
+              <div>
+                <code>ValueError</code>
+
+                <p>
+                  Raised when the input shapes are incompatible or the
+                  coefficient matrix is not square.
+                </p>
+              </div>
+
+              <div>
+                <code>LinAlgError</code>
+
+                <p>
+                  Raised when the system cannot be solved because the matrix is
+                  singular or the numerical factorization fails.
+                </p>
+              </div>
+
+              <div>
+                <code>LinAlgWarning</code>
+
+                <p>
+                  May be emitted when the matrix is detected to be poorly
+                  conditioned.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- BASIC EXAMPLE -->
+
+          <section id="example-basic" class="section">
+            <div class="section-label">Example 01</div>
+
+            <h2>Solve a basic linear system</h2>
+
+            <p>Consider the system:</p>
+
+            <div class="formula">
+              3x + 2y = 2
+              <br />
+              x − y = 4
+            </div>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> solve_example.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+
+A = np.array([
+    [3., 2.],
+    [1., -1.]
+])
+
+b = np.array([
+    2.,
+    4.
+])
+
+x = solve(A, b)
+
+print(x)</code></pre>
+            </div>
+
+            <div class="output">
+              <span> Output </span>
+
+              <pre><code>[ 2. -2.]</code></pre>
+            </div>
+          </section>
+
+          <!-- MULTIPLE RHS -->
+
+          <section id="example-multiple" class="section">
+            <div class="section-label">Example 02</div>
+
+            <h2>Multiple right-hand sides</h2>
+
+            <p>
+              The right-hand side can contain multiple columns. Each column
+              represents an independent system with the same coefficient matrix.
+            </p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> multiple_rhs.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+
+A = np.array([
+    [4., 2.],
+    [1., 3.]
+])
+
+B = np.array([
+    [10., 4.],
+    [7., 9.]
+])
+
+X = solve(A, B)
+
+print(X)</code></pre>
+            </div>
+          </section>
+
+          <!-- VERIFICATION -->
+
+          <section id="example-check" class="section">
+            <div class="section-label">Example 03</div>
+
+            <h2>Verify the solution</h2>
+
+            <p>
+              A simple way to verify a computed solution is to substitute it
+              back into the original equation.
+            </p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> verification.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+
+A = np.array([
+    [3., 2.],
+    [1., -1.]
+])
+
+b = np.array([2., 4.])
+
+x = solve(A, b)
+
+residual = A @ x - b
+
+print(residual)
+print(np.allclose(A @ x, b))</code></pre>
+            </div>
+
+            <div class="verification">
+              <strong> Expected </strong>
+
+              <code> True </code>
+            </div>
+          </section>
+
+          <!-- EXAMPLE 04 -->
+
+          <section id="example-3x3" class="section">
+            <div class="section-label">Example 04</div>
+
+            <h2>Solve a 3 × 3 system</h2>
+
+            <p>
+              For larger systems, the same interface is used. The coefficient
+              matrix must contain one row for each equation and one column for
+              each unknown.
+            </p>
+
+            <div class="formula">
+              2x + y + z = 5
+              <br />
+              4x + 5y + 2z = 14
+              <br />
+              x + 2y + 4z = 13
+            </div>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> solve_3x3.py </span>
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+A = np.array([
+    [2., 1., 1.],
+    [4., 5., 2.],
+    [1., 2., 4.]
+])
+b = np.array([5.,14.,3.])
+x = solve(A, b)
+print(x)</code></pre>
+            </div>
+
+            <div class="output">
+              <span> Output </span>
+              <pre><code>[1. 2. 3.]</code></pre>
+            </div>
+          </section>
+
+          <!-- EXAMPLE 05 -->
+
+          <section id="example-multiple-systems" class="section">
+            <div class="section-label">Example 05</div>
+
+            <h2>Solve multiple right-hand sides</h2>
+
+            <p>
+              Sometimes the coefficient matrix remains unchanged while several
+              different right-hand sides must be solved. In that situation, the
+              columns of <code>B</code> represent separate systems.
+            </p>
+
+            <div class="formula">AX = B</div>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> multiple_systems.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+A = np.array([
+    [3., 1.],
+    [1., 2.]
+])
+B = np.array([
+    [9., 4.],
+    [8., 5.]
+])
+X = solve(A, B)
+print(X)</code></pre>
+            </div>
+            <p>
+              Here <code>B[:, 0]</code> represents the first system and
+              <code>B[:, 1]</code> represents the second system. Both systems
+              use the same matrix <code>A</code>.
+            </p>
+          </section>
+
+          <!-- EXAMPLE 06 -->
+
+          <section id="example-residual" class="section">
+            <div class="section-label">Example 06</div>
+
+            <h2>Check the residual</h2>
+
+            <p>
+              After computing a solution, you can evaluate the residual to
+              determine how closely the computed solution satisfies the original
+              system.
+            </p>
+
+            <div class="formula">r = Ax − b</div>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> residual.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+A = np.array([
+    [4., 1.],
+    [2., 3.]
+])
+b = np.array([
+    9.,
+    13.
+])
+x = solve(A, b)
+residual = A @ x - b
+print(<span class="string">"solution:"</span>, x)
+print(<span class="string">"residual:"</span>, residual)</code></pre>
+            </div>
+            <div class="callout">
+              <div class="callout-icon">✓</div>
+              <div>
+                <strong> What should you expect? </strong>
+                <p>
+                  For a well-conditioned system solved with floating-point
+                  arithmetic, the residual should generally be close to zero,
+                  subject to numerical rounding.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- EXAMPLE 07 -->
+
+          <section id="example-allclose" class="section">
+            <div class="section-label">Example 07</div>
+
+            <h2>Verify the solution with <code>allclose</code></h2>
+
+            <p>
+              Exact equality is usually not appropriate for floating-point
+              numerical calculations. Instead, use a tolerance-aware comparison
+              such as <code>np.allclose()</code>.
+            </p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> verify.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+A = np.array([
+    [3., 2.],
+    [1., -1.]
+])
+b = np.array([
+    2.,
+    4.
+])
+x = solve(A, b)
+is_valid = np.allclose(
+    A @ x,
+    b
+)
+print(is_valid)</code></pre>
+            </div>
+            <div class="verification">
+              <strong> Result </strong>
+              <code> True </code>
+            </div>
+          </section>
+
+          <!-- EXAMPLE 08 -->
+
+          <section id="example-singular" class="section">
+            <div class="section-label">Example 08</div>
+
+            <h2>Handling a singular matrix</h2>
+
+            <p>
+              A singular matrix does not have a unique inverse and a
+              corresponding linear system cannot be solved using the standard
+              direct solver.
+            </p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span> singular.py </span>
+
+                <button class="copy-button" onclick="copyCode(this)">
+                  Copy
+                </button>
+              </div>
+
+              <pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> onithrasml.linalg <span class="keyword">import</span> solve
+A = np.array([
+    [1., 2.],
+    [2., 4.]
+])
+b = np.array([
+    3.,
+    6.
+])
+<span class="keyword">try</span>:
+    x = solve(A, b)
+    print(x)
+<span class="keyword">except</span> np.linalg.LinAlgError:
+    print(<span class="string">"Matrix is singular."</span>)</code></pre>
+            </div>
+            <div class="warning">
+              <strong> Why does this fail? </strong>
+              <p>
+                The second row is exactly two times the first row. Therefore,
+                the matrix does not contain enough independent information to
+                determine a unique solution.
+              </p>
+            </div>
+          </section>
+
+          <section id="how-it-works" class="section">
+            <div class="section-label">Under the hood</div>
+
+            <h2>How <code>solve()</code> works</h2>
+
+            <p>
+              Conceptually, solving a linear system means finding a vector
+              <code>x</code> for which the matrix multiplication
+              <code>A @ x</code> produces <code>b</code>.
+            </p>
+
+            <div class="workflow">
+              <div class="workflow-item">
+                <span class="workflow-number"> 01 </span>
+
+                <div>
+                  <strong> Validate inputs </strong>
+
+                  <p>
+                    Check dimensions, data types and numerical validity of the
+                    input arrays.
+                  </p>
+                </div>
+              </div>
+
+              <div class="workflow-item">
+                <span class="workflow-number"> 02 </span>
+
+                <div>
+                  <strong> Analyze matrix structure </strong>
+
+                  <p>
+                    If structural information is available, a specialized
+                    numerical method may be used.
+                  </p>
+                </div>
+              </div>
+
+              <div class="workflow-item">
+                <span class="workflow-number"> 03 </span>
+
+                <div>
+                  <strong> Factorize the matrix </strong>
+
+                  <p>
+                    A numerical factorization transforms the original system
+                    into forms that are easier to solve.
+                  </p>
+                </div>
+              </div>
+
+              <div class="workflow-item">
+                <span class="workflow-number"> 04 </span>
+
+                <div>
+                  <strong> Compute the solution </strong>
+
+                  <p>
+                    The resulting factors are used to obtain the solution vector
+                    or matrix.
+                  </p>
+                </div>
+              </div>
+
+              <div class="workflow-item">
+                <span class="workflow-number"> 05 </span>
+
+                <div>
+                  <strong> Return x </strong>
+
+                  <p>
+                    The computed solution is returned as an array with the
+                    appropriate shape.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CHOOSING SOLVER -->
+
+          <section class="section">
+            <h2>Choosing the right solver</h2>
+
+            <div class="decision-table">
+              <div class="decision-row header-row">
+                <span> Problem </span>
+
+                <span> Recommended </span>
+
+                <span> Reason </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> General system </strong>
+
+                <code> solve() </code>
+
+                <span> General-purpose linear system. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Triangular system </strong>
+
+                <code> solve_triangular() </code>
+
+                <span> Exploits triangular structure. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Repeated solves </strong>
+
+                <code> factor + solve </code>
+
+                <span> Reuse matrix factorization. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Least squares </strong>
+
+                <code> lstsq() </code>
+
+                <span>
+                  Appropriate when the system is overdetermined or
+                  underdetermined.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- RELATED -->
+
+          <section class="related">
+            <div class="section-label">Related APIs</div>
+
+            <div class="related-grid">
+              <a href="./inv.html">
+                <code>inv</code>
+                <span> Matrix inverse </span>
+              </a>
+
+              <a href="./det.html">
+                <code>det</code>
+                <span> Matrix determinant </span>
+              </a>
+
+              <a href="./norm.html">
+                <code>norm</code>
+                <span> Vector and matrix norm </span>
+              </a>
+
+              <a href="./lstsq.html">
+                <code>lstsq</code>
+                <span> Least-squares solution </span>
+              </a>
+            </div>
+          </section>
+        </article>
+
+        <!-- =================================================
+             RIGHT TOC
+        ================================================== -->
+
+        <aside class="toc">
+          <div class="toc-title">On this page</div>
+
+          <a href="#overview"> Overview </a>
+
+          <a href="#signature"> Signature </a>
+
+          <a href="#parameters"> Parameters </a>
+
+          <a href="#matrix-types"> Matrix structure </a>
+
+          <a href="#returns"> Returns </a>
+
+          <a href="#stability"> Numerical stability </a>
+
+          <a href="#errors"> Errors </a>
+
+          <a href="#example-basic"> Basic example </a>
+
+          <a href="#example-multiple"> Multiple RHS </a>
+
+          <a href="#example-check"> Verification </a>
+
+          <div class="toc-divider"></div>
+
+          <a href="./linear-algebra.html"> ← Linear Algebra </a>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div>© 2026 OnithrasML</div>
+
+      <div>Linear Algebra API</div>
+    </footer>
+
+    <script>
+      function copyCode(button) {
+        const block = button.closest(".code-block");
+
+        const code = block.querySelector("code").innerText;
+
+        navigator.clipboard.writeText(code);
+
+        const original = button.innerText;
+
+        button.innerText = "Copied";
+
+        setTimeout(() => {
+          button.innerText = original;
+        }, 1400);
+      }
+    </script>
+  </body>
+</html>

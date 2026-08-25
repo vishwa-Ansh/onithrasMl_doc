@@ -1,0 +1,1486 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="OnithrasML Linear Algebra API documentation."
+    />
+
+    <title>Linear Algebra — OnithrasML</title>
+
+    <link rel="stylesheet" href="./linear-algebra.css" />
+
+    <!-- MathJax -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["\\(", "\\)"]],
+          displayMath: [["\\[", "\\]"]],
+        },
+      };
+    </script>
+
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+
+  <body>
+    <!-- =========================================================
+     HEADER
+========================================================= -->
+
+    <header class="header">
+      <div class="header-inner">
+        <a href="../index.html" class="logo"> Onithras<span>ML</span> </a>
+
+        <nav class="nav">
+          <a href="../index.html"> Docs </a>
+
+          <a href="../numerical.html"> Numerical </a>
+
+          <a href="./linear-algebra.html" class="active"> Linear Algebra </a>
+        </nav>
+
+        <div class="header-status">
+          <span class="status-dot"></span>
+
+          <span> Developer Preview </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================================================
+     MAIN
+========================================================= -->
+
+    <main class="page">
+      <!-- =====================================================
+         BREADCRUMB
+    ====================================================== -->
+
+      <div class="breadcrumb">
+        <a href="../index.html"> Documentation </a>
+
+        <span>/</span>
+
+        <a href="../numerical.html"> Numerical Computing </a>
+
+        <span>/</span>
+
+        <strong> Linear Algebra </strong>
+      </div>
+
+      <!-- =====================================================
+         DOCUMENTATION GRID
+    ====================================================== -->
+
+      <div class="docs-layout">
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+          <div class="sidebar-heading">Linear Algebra</div>
+
+          <div class="sidebar-section">
+            <span class="sidebar-label"> OVERVIEW </span>
+
+            <a href="#overview"> Introduction </a>
+
+            <a href="#design"> API design </a>
+          </div>
+
+          <div class="sidebar-section">
+            <span class="sidebar-label"> AVAILABLE </span>
+
+            <a href="#basics"> Basics </a>
+
+            <a href="#decompositions"> Decompositions </a>
+
+            <a href="#matrix-functions"> Matrix Functions </a>
+
+            <a href="#special-matrices"> Special Matrices </a>
+          </div>
+
+          <div class="sidebar-section">
+            <span class="sidebar-label"> ROADMAP </span>
+
+            <a href="#planned-basics"> Extended Basics </a>
+
+            <a href="#planned-eigen"> Eigenvalue Extensions </a>
+
+            <a href="#planned-decomp"> Advanced Decompositions </a>
+
+            <a href="#equations"> Matrix Equations </a>
+
+            <a href="#low-level"> BLAS / LAPACK </a>
+          </div>
+
+          <div class="sidebar-section">
+            <span class="sidebar-label"> GUIDANCE </span>
+
+            <a href="#choosing"> Choosing an API </a>
+
+            <a href="#stability"> Numerical Stability </a>
+          </div>
+        </aside>
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <article class="content">
+          <!-- =================================================
+                 HERO
+            ================================================== -->
+
+          <section class="hero" id="overview">
+            <div class="hero-kicker">
+              ONITHRASML
+              <span>·</span>
+              SCIPY-INSPIRED LINEAR ALGEBRA
+            </div>
+
+            <h1>Linear Algebra</h1>
+
+            <p class="hero-lead">
+              High-performance numerical tools for matrices, vectors, linear
+              systems, decompositions, matrix functions, and scientific
+              computing.
+            </p>
+
+            <div class="hero-meta">
+              <div class="meta-card">
+                <span class="meta-label"> MODULE </span>
+
+                <code> onithrasml.linalg </code>
+              </div>
+
+              <div class="meta-card">
+                <span class="meta-label"> STATUS </span>
+
+                <strong class="available-text"> Active development </strong>
+              </div>
+
+              <div class="meta-card">
+                <span class="meta-label"> COMPATIBILITY </span>
+
+                <strong> NumPy arrays </strong>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 INTRO
+            ================================================== -->
+
+          <section class="section">
+            <div class="section-kicker">OVERVIEW</div>
+
+            <h2>Linear algebra for numerical computing.</h2>
+
+            <p>
+              The <code>onithrasml.linalg</code> module provides numerical
+              algorithms for working with vectors and matrices. It forms the
+              mathematical foundation for optimization, statistics, machine
+              learning, scientific simulation, and other numerical workloads.
+            </p>
+
+            <p>
+              OnithrasML is gradually expanding its linear algebra layer. The
+              documentation therefore separates the API into functionality that
+              is currently available and functionality planned for future
+              releases.
+            </p>
+
+            <div class="important">
+              <div class="important-icon">i</div>
+
+              <div>
+                <strong> API availability </strong>
+
+                <p>
+                  Only APIs marked
+                  <span class="inline-status available"> Available </span>
+                  should be considered part of the current public API. APIs
+                  marked
+                  <span class="inline-status planned"> Planned </span>
+                  represent the future direction of the module.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 DESIGN
+            ================================================== -->
+
+          <section class="section" id="design">
+            <div class="section-kicker">DESIGN</div>
+
+            <h2>A familiar API, built for OnithrasML.</h2>
+
+            <p>
+              The design takes inspiration from established scientific Python
+              conventions while keeping the API focused on OnithrasML's
+              numerical computing architecture.
+            </p>
+
+            <div class="architecture">
+              <div class="architecture-item">
+                <div class="architecture-number">01</div>
+
+                <div>
+                  <strong> NumPy-compatible inputs </strong>
+
+                  <p>
+                    Numerical arrays remain the primary data representation.
+                  </p>
+                </div>
+              </div>
+
+              <div class="architecture-item">
+                <div class="architecture-number">02</div>
+
+                <div>
+                  <strong> Specialized algorithms </strong>
+
+                  <p>
+                    Algorithms should use the appropriate numerical method
+                    instead of unnecessary work.
+                  </p>
+                </div>
+              </div>
+
+              <div class="architecture-item">
+                <div class="architecture-number">03</div>
+
+                <div>
+                  <strong> Numerical correctness </strong>
+
+                  <p>
+                    Stability, tolerances, conditioning, and residuals are
+                    treated as first-class concerns.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 AVAILABLE HEADER
+            ================================================== -->
+
+          <section class="catalog-header">
+            <div>
+              <div class="section-kicker">CURRENT API</div>
+
+              <h2>Available now</h2>
+            </div>
+
+            <div class="catalog-count">CURRENT RELEASE</div>
+          </section>
+
+          <!-- =================================================
+                 BASICS
+            ================================================== -->
+
+          <section class="api-group" id="basics">
+            <div class="group-header">
+              <div>
+                <span class="group-number"> 01 </span>
+
+                <div>
+                  <h2>Basics</h2>
+
+                  <p>
+                    Core operations for solving, measuring, and analyzing
+                    matrices.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status available"> AVAILABLE </span>
+            </div>
+
+            <div class="api-grid">
+              <!-- inv -->
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> inv </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Matrix inverse</h3>
+
+                <p>Compute the inverse of a nonsingular square matrix.</p>
+
+                <div class="api-signature">inv(A)</div>
+              </a>
+
+              <!-- solve -->
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> solve </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Linear system solver</h3>
+
+                <p>
+                  Solve the system \(Ax=b\) without explicitly forming the
+                  inverse.
+                </p>
+
+                <div class="api-signature">solve(A, b)</div>
+              </a>
+
+              <!-- det -->
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> det </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Determinant</h3>
+
+                <p>Compute the determinant of a square matrix.</p>
+
+                <div class="api-signature">det(A)</div>
+              </a>
+
+              <!-- norm -->
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> norm </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Vector & matrix norm</h3>
+
+                <p>
+                  Measure vector or matrix magnitude using different norm
+                  orders.
+                </p>
+
+                <div class="api-signature">norm(A, ord=None)</div>
+              </a>
+
+              <!-- lstsq -->
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> lstsq </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Least squares</h3>
+
+                <p>
+                  Compute an approximate solution to an overdetermined system.
+                </p>
+
+                <div class="api-signature">lstsq(A, b)</div>
+              </a>
+
+              <!-- pinv -->
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> pinv </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Pseudo-inverse</h3>
+
+                <p>Compute the Moore-Penrose pseudo-inverse of a matrix.</p>
+
+                <div class="api-signature">pinv(A)</div>
+              </a>
+
+              <!-- solve guidance -->
+
+              <div class="api-guidance">
+                <div class="guidance-icon">→</div>
+
+                <div>
+                  <strong> Which routine should I use? </strong>
+
+                  <p>
+                    If you need \(x\) from \(Ax=b\), start with
+                    <code>solve()</code>. Do not calculate
+                    <code>inv(A) @ b</code>
+                    unless you specifically need the inverse itself.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 DECOMPOSITIONS
+            ================================================== -->
+
+          <section class="api-group" id="decompositions">
+            <div class="group-header">
+              <div>
+                <span class="group-number"> 02 </span>
+
+                <div>
+                  <h2>Decompositions</h2>
+
+                  <p>
+                    Factor matrices into structures useful for numerical
+                    algorithms.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status available"> AVAILABLE </span>
+            </div>
+
+            <div class="api-grid">
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> lu </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>LU decomposition</h3>
+
+                <p>
+                  Factor a matrix into permutation, lower, and upper triangular
+                  matrices.
+                </p>
+
+                <div class="formula-small">\(PA = LU\)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> cholesky </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Cholesky factorization</h3>
+
+                <p>
+                  Factor a positive-definite matrix into triangular components.
+                </p>
+
+                <div class="formula-small">\(A = LL^T\)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> qr </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>QR decomposition</h3>
+
+                <p>
+                  Factor a matrix into orthogonal and triangular components.
+                </p>
+
+                <div class="formula-small">\(A = QR\)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> svd </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Singular Value Decomposition</h3>
+
+                <p>
+                  Decompose a matrix into orthogonal matrices and singular
+                  values.
+                </p>
+
+                <div class="formula-small">\(A = U\Sigma V^T\)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> eig </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Eigenvalue problem</h3>
+
+                <p>
+                  Compute eigenvalues and corresponding eigenvectors of a square
+                  matrix.
+                </p>
+
+                <div class="formula-small">\(Av=\lambda v\)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> schur </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Schur decomposition</h3>
+
+                <p>Compute a Schur representation of a square matrix.</p>
+
+                <div class="formula-small">\(A=QTQ^H\)</div>
+              </a>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 MATRIX FUNCTIONS
+            ================================================== -->
+
+          <section class="api-group" id="matrix-functions">
+            <div class="group-header">
+              <div>
+                <span class="group-number"> 03 </span>
+
+                <div>
+                  <h2>Matrix Functions</h2>
+
+                  <p>
+                    Apply mathematical functions directly to square matrices.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status available"> AVAILABLE </span>
+            </div>
+
+            <div class="api-grid">
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> expm </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Matrix exponential</h3>
+
+                <p>Compute the exponential of a square matrix.</p>
+
+                <div class="api-signature">expm(A)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> logm </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Matrix logarithm</h3>
+
+                <p>Compute a matrix logarithm of a square matrix.</p>
+
+                <div class="api-signature">logm(A)</div>
+              </a>
+
+              <a href="#" class="api-card available-card">
+                <div class="api-card-top">
+                  <code> funm </code>
+
+                  <span class="api-status"> Available </span>
+                </div>
+
+                <h3>Arbitrary matrix function</h3>
+
+                <p>
+                  Evaluate a user-provided scalar function as a matrix function.
+                </p>
+
+                <div class="api-signature">funm(A, func)</div>
+              </a>
+
+              <div class="api-guidance">
+                <div class="guidance-icon">ƒ</div>
+
+                <div>
+                  <strong> Matrix functions </strong>
+
+                  <p>
+                    Matrix functions are not the same as applying an
+                    element-wise function to every entry. For example, \(e^A\)
+                    is a matrix exponential, not <code>np.exp(A)</code>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 SPECIAL MATRICES
+            ================================================== -->
+
+          <section class="api-group" id="special-matrices">
+            <div class="group-header">
+              <div>
+                <span class="group-number"> 04 </span>
+
+                <div>
+                  <h2>Special Matrices</h2>
+
+                  <p>
+                    Structured matrices used throughout numerical mathematics.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status available"> AVAILABLE </span>
+            </div>
+
+            <div class="special-grid">
+              <div class="special-card">
+                <code> block_diag </code>
+
+                <span> Block diagonal matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> circulant </code>
+
+                <span> Circulant matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> companion </code>
+
+                <span> Companion matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> convolution_matrix </code>
+
+                <span> Convolution matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> dft </code>
+
+                <span> Discrete Fourier transform matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> fiedler </code>
+
+                <span> Symmetric Fiedler matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> hadamard </code>
+
+                <span> Hadamard matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> hankel </code>
+
+                <span> Hankel matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> helmert </code>
+
+                <span> Helmert matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> hilbert </code>
+
+                <span> Hilbert matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> leslie </code>
+
+                <span> Leslie matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> pascal </code>
+
+                <span> Pascal matrix </span>
+              </div>
+
+              <div class="special-card">
+                <code> toeplitz </code>
+
+                <span> Toeplitz matrix </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 ROADMAP
+            ================================================== -->
+
+          <section class="roadmap-header">
+            <div class="section-kicker">ROADMAP</div>
+
+            <h2>Expanding the linear algebra engine.</h2>
+
+            <p>
+              The following APIs are planned for future OnithrasML releases.
+              They are documented here as part of the module roadmap, but they
+              are not currently presented as available APIs.
+            </p>
+          </section>
+
+          <!-- =================================================
+                 PLANNED BASICS
+            ================================================== -->
+
+          <section class="roadmap-group" id="planned-basics">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 05 </span>
+
+                <div>
+                  <h2>Extended Basic Operations</h2>
+
+                  <p>Specialized solvers and matrix structure utilities.</p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="roadmap-list">
+              <div class="roadmap-item">
+                <code> solve_banded </code>
+
+                <span> Solve banded linear systems. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> solveh_banded </code>
+
+                <span> Solve Hermitian positive-definite banded systems. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> solve_triangular </code>
+
+                <span> Solve triangular systems efficiently. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> solve_toeplitz </code>
+
+                <span> Solve Toeplitz linear systems. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> solve_circulant </code>
+
+                <span> Solve systems involving circulant matrices. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> kron </code>
+
+                <span> Compute the Kronecker product. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> khatri_rao </code>
+
+                <span> Compute the Khatri-Rao product. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> matrix_balance </code>
+
+                <span>
+                  Improve matrix scaling and conditioning through balancing.
+                </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> bandwidth </code>
+
+                <span> Determine lower and upper matrix bandwidth. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> issymmetric </code>
+
+                <span> Test whether a matrix is symmetric. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> ishermitian </code>
+
+                <span> Test whether a matrix is Hermitian. </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 EIGEN ROADMAP
+            ================================================== -->
+
+          <section class="roadmap-group" id="planned-eigen">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 06 </span>
+
+                <div>
+                  <h2>Eigenvalue Extensions</h2>
+
+                  <p>
+                    Specialized eigenvalue algorithms for structured matrices.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="roadmap-list">
+              <div class="roadmap-item">
+                <code> eigvals </code>
+
+                <span> Compute eigenvalues without eigenvectors. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> eigh </code>
+
+                <span> Symmetric or Hermitian eigenvalue problem. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> eigvalsh </code>
+
+                <span> Eigenvalues of symmetric or Hermitian matrices. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> eig_banded </code>
+
+                <span> Eigenvalue problem for banded matrices. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> eigvals_banded </code>
+
+                <span> Eigenvalues of banded matrices. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> eigh_tridiagonal </code>
+
+                <span> Symmetric tridiagonal eigenvalue problem. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> eigvalsh_tridiagonal </code>
+
+                <span> Eigenvalues of symmetric tridiagonal matrices. </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 ADVANCED DECOMPOSITIONS
+            ================================================== -->
+
+          <section class="roadmap-group" id="planned-decomp">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 07 </span>
+
+                <div>
+                  <h2>Advanced Decompositions</h2>
+
+                  <p>
+                    More factorization algorithms for specialized numerical
+                    workloads.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="roadmap-list">
+              <div class="roadmap-item">
+                <code> lu_factor </code>
+
+                <span> Factor a matrix once for repeated solves. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> lu_solve </code>
+
+                <span>
+                  Solve systems using a precomputed LU factorization.
+                </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> svdvals </code>
+
+                <span> Compute singular values without full vectors. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> orth </code>
+
+                <span>
+                  Construct an orthonormal basis for a matrix range.
+                </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> null_space </code>
+
+                <span>
+                  Construct an orthonormal basis for the null space.
+                </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> ldl </code>
+
+                <span> Symmetric/Hermitian LDLᵀ factorization. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> polar </code>
+
+                <span> Compute the polar decomposition. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> rq </code>
+
+                <span> Compute RQ decomposition. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> hessenberg </code>
+
+                <span> Reduce a matrix to Hessenberg form. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> qz </code>
+
+                <span> Generalized Schur / QZ decomposition. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> ordqz </code>
+
+                <span> Reorder a generalized Schur decomposition. </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 MATRIX FUNCTIONS ROADMAP
+            ================================================== -->
+
+          <section class="roadmap-group" id="planned-functions">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 08 </span>
+
+                <div>
+                  <h2>Extended Matrix Functions</h2>
+
+                  <p>
+                    Broader support for analytic and algebraic matrix functions.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="roadmap-list">
+              <div class="roadmap-item">
+                <code> cosm </code>
+
+                <span> Matrix cosine. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> sinm </code>
+
+                <span> Matrix sine. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> tanm </code>
+
+                <span> Matrix tangent. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> coshm </code>
+
+                <span> Hyperbolic matrix cosine. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> sinhm </code>
+
+                <span> Hyperbolic matrix sine. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> tanhm </code>
+
+                <span> Hyperbolic matrix tangent. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> signm </code>
+
+                <span> Matrix sign function. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> sqrtm </code>
+
+                <span> Matrix square root. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> fractional_matrix_power </code>
+
+                <span> Compute fractional powers of matrices. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> expm_frechet </code>
+
+                <span> Fréchet derivative of the matrix exponential. </span>
+              </div>
+
+              <div class="roadmap-item">
+                <code> expm_cond </code>
+
+                <span> Estimate the condition number of expm. </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 EQUATIONS
+            ================================================== -->
+
+          <section class="roadmap-group" id="equations">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 09 </span>
+
+                <div>
+                  <h2>Matrix Equation Solvers</h2>
+
+                  <p>
+                    Specialized solvers for matrix equations and
+                    control-oriented problems.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="equation-preview">
+              <div class="equation-card">
+                <code> solve_sylvester </code>
+
+                <div class="equation">\(AX + XB = Q\)</div>
+              </div>
+
+              <div class="equation-card">
+                <code> solve_continuous_lyapunov </code>
+
+                <div class="equation">\(AX + XA^T = Q\)</div>
+              </div>
+
+              <div class="equation-card">
+                <code> solve_discrete_lyapunov </code>
+
+                <div class="equation">\(AXA^T - X = Q\)</div>
+              </div>
+
+              <div class="equation-card">
+                <code> solve_continuous_are </code>
+
+                <div class="equation">CARE</div>
+              </div>
+
+              <div class="equation-card">
+                <code> solve_discrete_are </code>
+
+                <div class="equation">DARE</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 SKETCHING
+            ================================================== -->
+
+          <section class="roadmap-group">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 10 </span>
+
+                <div>
+                  <h2>Sketches & Random Projections</h2>
+
+                  <p>
+                    Algorithms designed for large-scale numerical workloads.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="single-roadmap-card">
+              <code> clarkson_woodruff_transform </code>
+
+              <p>
+                A randomized matrix sketching technique intended for reducing
+                the dimensionality of large matrix computations while
+                approximately preserving important structure.
+              </p>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 LOW LEVEL
+            ================================================== -->
+
+          <section class="roadmap-group" id="low-level">
+            <div class="roadmap-heading">
+              <div>
+                <span class="roadmap-number"> 11 </span>
+
+                <div>
+                  <h2>Low-level BLAS & LAPACK</h2>
+
+                  <p>
+                    A future low-level layer for users who need direct access to
+                    optimized numerical kernels.
+                  </p>
+                </div>
+              </div>
+
+              <span class="group-status planned"> PLANNED </span>
+            </div>
+
+            <div class="low-level-grid">
+              <div>
+                <code> get_blas_funcs </code>
+
+                <span> Discover optimized BLAS routines. </span>
+              </div>
+
+              <div>
+                <code> get_lapack_funcs </code>
+
+                <span> Discover optimized LAPACK routines. </span>
+              </div>
+
+              <div>
+                <code> find_best_blas_type </code>
+
+                <span> Select the appropriate BLAS data type. </span>
+              </div>
+            </div>
+
+            <div class="low-level-note">
+              <strong> Why this matters </strong>
+
+              <p>
+                High-level APIs should remain the preferred interface for most
+                users. Low-level BLAS and LAPACK access is intended for advanced
+                optimization, custom numerical kernels, and
+                performance-sensitive workloads.
+              </p>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 CHOOSING API
+            ================================================== -->
+
+          <section class="section" id="choosing">
+            <div class="section-kicker">USER GUIDANCE</div>
+
+            <h2>Which linear algebra routine should I use?</h2>
+
+            <div class="decision-table">
+              <div class="decision-row header-row">
+                <span> Problem </span>
+
+                <span> Recommended API </span>
+
+                <span> Why </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Solve \(Ax=b\) </strong>
+
+                <code> solve </code>
+
+                <span> Avoids unnecessary explicit inversion. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Need \(A^{-1}\) </strong>
+
+                <code> inv </code>
+
+                <span> Directly computes the inverse. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Approximate system </strong>
+
+                <code> lstsq </code>
+
+                <span> Minimizes the least-squares residual. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Non-square inverse </strong>
+
+                <code> pinv </code>
+
+                <span> Uses the Moore-Penrose pseudo-inverse. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Understand spectrum </strong>
+
+                <code> eig </code>
+
+                <span> Computes eigenvalues and eigenvectors. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Low-rank structure </strong>
+
+                <code> svd </code>
+
+                <span> Exposes singular values and directions. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Positive-definite matrix </strong>
+
+                <code> cholesky </code>
+
+                <span> Efficient factorization for SPD matrices. </span>
+              </div>
+
+              <div class="decision-row">
+                <strong> Orthogonal factorization </strong>
+
+                <code> qr </code>
+
+                <span>
+                  Useful for least squares and numerical algorithms.
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 STABILITY
+            ================================================== -->
+
+          <section class="section stability-section" id="stability">
+            <div class="section-kicker">NUMERICAL STABILITY</div>
+
+            <h2>Correct mathematics is not enough.</h2>
+
+            <p>
+              Numerical linear algebra operates with finite-precision
+              floating-point arithmetic. The implementation therefore needs to
+              consider conditioning, rounding error, pivoting, tolerances, and
+              residuals.
+            </p>
+
+            <div class="stability-grid">
+              <div class="stability-card">
+                <span> 01 </span>
+
+                <h3>Conditioning</h3>
+
+                <p>
+                  Poorly conditioned matrices can amplify small input errors.
+                </p>
+              </div>
+
+              <div class="stability-card">
+                <span> 02 </span>
+
+                <h3>Pivoting</h3>
+
+                <p>
+                  Pivoting can improve numerical stability during matrix
+                  factorization.
+                </p>
+              </div>
+
+              <div class="stability-card">
+                <span> 03 </span>
+
+                <h3>Residuals</h3>
+
+                <p>
+                  Check \(r=Ax-b\) to evaluate the quality of a computed
+                  solution.
+                </p>
+              </div>
+
+              <div class="stability-card">
+                <span> 04 </span>
+
+                <h3>Tolerances</h3>
+
+                <p>
+                  Tolerances determine when values should be treated as
+                  numerically zero.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 ROADMAP MESSAGE
+            ================================================== -->
+
+          <section class="roadmap-banner">
+            <div class="roadmap-banner-icon">+</div>
+
+            <div>
+              <span> ONITHRASML ROADMAP </span>
+
+              <h2>More numerical linear algebra is coming.</h2>
+
+              <p>
+                The long-term goal is to build a complete linear algebra layer
+                covering high-level scientific routines, specialized matrix
+                algorithms, matrix equations, structured matrices, and
+                eventually low-level performance-oriented numerical kernels.
+              </p>
+            </div>
+          </section>
+
+          <!-- =================================================
+                 FOOTER NAVIGATION
+            ================================================== -->
+
+          <div class="page-navigation">
+            <a href="../numerical.html">
+              <span> PREVIOUS </span>
+
+              <strong> Numerical Computing </strong>
+            </a>
+
+            <a href="#">
+              <span> NEXT </span>
+
+              <strong> Statistics → </strong>
+            </a>
+          </div>
+        </article>
+
+        <!-- =================================================
+             RIGHT TOC
+        ================================================== -->
+
+        <aside class="toc">
+          <div class="toc-title">On this page</div>
+
+          <a href="#overview"> Overview </a>
+
+          <a href="#design"> API design </a>
+
+          <div class="toc-divider"></div>
+
+          <a href="#basics"> Basics </a>
+
+          <a href="#decompositions"> Decompositions </a>
+
+          <a href="#matrix-functions"> Matrix Functions </a>
+
+          <a href="#special-matrices"> Special Matrices </a>
+
+          <div class="toc-divider"></div>
+
+          <a href="#planned-basics"> Extended Basics </a>
+
+          <a href="#planned-eigen"> Eigenvalue Extensions </a>
+
+          <a href="#planned-decomp"> Advanced Decompositions </a>
+
+          <a href="#equations"> Matrix Equations </a>
+
+          <a href="#low-level"> BLAS / LAPACK </a>
+
+          <div class="toc-divider"></div>
+
+          <a href="#choosing"> Choosing an API </a>
+
+          <a href="#stability"> Numerical Stability </a>
+        </aside>
+      </div>
+
+      <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+      <footer class="footer">
+        <div>
+          <strong> OnithrasML </strong>
+
+          <span> · Linear Algebra </span>
+        </div>
+
+        <div>Scientific Computing</div>
+      </footer>
+    </main>
+  </body>
+</html>
