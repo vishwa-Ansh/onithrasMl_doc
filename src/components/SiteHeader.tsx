@@ -38,7 +38,7 @@ export function SiteHeader({ compact = false }: SiteHeaderProps) {
           <a href={`/docs/${latestVersion.slug}#install`}>
   Install
 </a>
-          <a href='../../../app/docs/_index.html'>
+          <a href='/docs/_index.html'>
             User guide
           </a>
           <a href={`/docs/${latestVersion.slug}#api`}>
