@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { SiteHeader } from "../../src/components/SiteHeader";
+import { SiteHeader } from "./components/SiteHeader";
 
 const root = document.getElementById("header-root");
 
